@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/deck_estimate_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.inviscid.fastimate.DeckEstimateActivity">
+
+    <TextView
+        android:id="@+id/de_title"
+        android:text="@string/deck_screen_message" android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/de_field_length"
+        style="@style/editTextFastimate"
+        android:hint="@string/edit_deck_length"
+        android:layout_below="@+id/de_title"
+        android:inputType="number"
+        />
+
+    <EditText
+        android:id="@+id/de_field_width"
+        style="@style/editTextFastimate"
+        android:hint="@string/edit_deck_width"
+        android:layout_below="@+id/de_field_ledger"
+        android:inputType="number"
+        />
+    <EditText
+        android:id="@+id/de_field_height"
+        style="@style/editTextFastimate"
+        android:hint="@string/edit_deck_height"
+        android:layout_below="@+id/de_field_width"
+        android:inputType="number"
+        />
+    <EditText
+        android:id="@+id/de_field_ledger"
+        style="@style/editTextFastimate"
+        android:hint="@string/edit_deck_ledger"
+        android:layout_below="@+id/de_field_length"
+        android:inputType="number"
+        />
+    <Button
+        android:id="@+id/de_button_calculate_estimate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_calculate_deck"
+        android:layout_below= "@id/de_field_height"
+        android:onClick="openDeckMaterialList"/>
+
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/deck_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/de_button_calculate_estimate"
+        >
+
+        <!-- TODO: Update blank fragment layout -->
+        <TextView android:layout_width="match_parent" android:layout_height="match_parent"
+            android:text="" />
+
+    </FrameLayout>
+</RelativeLayout>

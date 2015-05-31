@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Fastimate</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="welcome_message">Welcome to Fastimate!</string>
+    <string name="button_main_deck">Deck</string>
+    <string name="title_activity_deck_estimate">DeckEstimateActivity</string>
+    <string name="deck_screen_message">Desk Fastimate Screen</string>
+    <string name="edit_deck_width">Width</string>
+    <string name="edit_deck_height">Height</string>
+    <string name="edit_deck_length">Length</string>
+    <string name="edit_deck_ledger">Ledger Length (if applicable)</string>
+    <string name="button_calculate_deck">Fastimate this deck!</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_display_deck_materials_list">DisplayDeckMaterialsList</string>
+
+</resources>
