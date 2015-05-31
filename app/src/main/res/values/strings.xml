@@ -2,7 +2,7 @@
     <string name="app_name">Fastimate</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="welcome_message">Welcome to Fastimate!</string>
+    <string name="welcome_message">Welcome to Fastimate Alpha!!</string>
     <string name="button_main_deck">Deck</string>
     <string name="title_activity_deck_estimate">DeckEstimateActivity</string>
     <string name="deck_screen_message">Desk Fastimate Screen</string>
