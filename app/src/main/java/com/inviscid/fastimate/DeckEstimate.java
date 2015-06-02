@@ -156,7 +156,7 @@ public class DeckEstimate {
         deckHeight = height;
         deckLength = length;
         deckWidth = width;
-        deckHouseLedgerLength = length;
+        deckHouseLedgerLength = 0;
 
         deckArea = deckLength * deckWidth;
         deckPerimeter = 2*deckLength + 2*deckWidth;
@@ -183,7 +183,7 @@ public class DeckEstimate {
     private void calculateLedger(){
 
         ledgerFastener.setNumberOfFasteners((int) deckHouseLedgerLength/2 );  //Once fastener per 2 feet
-        ledgerFastener.setLagScrews(2*ledgerFastener.getNumberOfFasteners());  // 2 screws, washers, nuts per fastener.  continues below
+        ledgerFastener.setLagScrews(2 * ledgerFastener.getNumberOfFasteners());  // 2 screws, washers, nuts per fastener.  continues below
         ledgerFastener.setNuts(ledgerFastener.getLagScrews());
         ledgerFastener.setWashers(ledgerFastener.getLagScrews());
         this.setRimBoardLength(this.getDeckHouseLedgerLength());
@@ -199,10 +199,10 @@ public class DeckEstimate {
             deckBeam.setNumberOfBeams(deckBeam.getNumberOfBeams()*2);
         }
         DeckBeamFastener deckbf = new DeckBeamFastener();
-        deckbf.setNumberOfFasteners(numberOfPosts * 2);
+        deckbf.setNumberOfFasteners(numberOfPosts );
         deckbf.setCarriageBolts(2 * deckbf.getNumberOfFasteners());
         deckbf.setNuts(2 * deckbf.getNumberOfFasteners());
-        deckbf.setWashers(2*deckbf.getNumberOfFasteners());
+        deckbf.setWashers(2 * deckbf.getNumberOfFasteners());
 
         deckBeam.setDeckBeamFastener(deckbf);
 
@@ -211,9 +211,9 @@ public class DeckEstimate {
     public void calculateJoistComponents(){
         joist = new JoistEstimate();
         //Equation: 75% of Deck Length +1, rounded up
-        joist.setNumberOfJoists((int) Math.ceil((deckLength * .75) + 1));
+        joist.setNumberOfJoists((int) Math.ceil((Math.max(deckLength,deckWidth) * .75) + 1));
         //Simply = number of Joists
-        joist.setNumberOfJoistHangers(joist.getNumberOfJoists()); //Possible Multiplication by 2?
+        joist.setNumberOfJoistHangers(joist.getNumberOfJoists()*2); //Possible Multiplication by 2?
         //1 for basic decks
         joist.setBoxesOfHangerNails(1);
     }
@@ -221,10 +221,11 @@ public class DeckEstimate {
     public void calculateDeckBoards(){
         //=Width of Deck IN INCHES/ 5.5
         //Important Change: Choose the largest of length and width to determine estimate
-        setNumberOfDeckBoards((int) Math.ceil((Math.max(deckWidth,deckLength)*12)/5.5)); //Convert to inches here
+        setNumberOfDeckBoards((int) (Math.ceil((Math.max(deckWidth,deckLength)*12)/5.5)*1.1)); //Convert to inches here  // 6/1 Change: Added 10% waste to total calculation.
+
         //If deck width and height are both longer than ~15, multiply final amount by 1.5
         if(deckWidth > 15 && deckLength > 15){
-            setNumberOfDeckBoards((int)(numberOfDeckBoards* 1.5) );
+            setNumberOfDeckBoards((int)(numberOfDeckBoards* 1.1) );
         }
         dbFastener = new DeckBoardFastener();
         //Formula = 15lb box for every 100ft^2 of deck+10%, round up
@@ -252,9 +253,14 @@ public class DeckEstimate {
             System.out.println("Here is the DeckEstimation Test Results:");
             System.out.println("Deck Dimensions:  Length: " + this.deckLength + " Width: " + this.deckHeight + " Height: " + this.deckHeight) ;
             System.out.println("Deck Calculations: Area: " + this.deckArea + "  Perimiter: "+ this.deckPerimeter );
-            System.out.println("House Ledger Length: " + this.deckHouseLedgerLength);
-            System.out.println("House Ledger Fasteners: " + this.ledgerFastener.getNumberOfFasteners());
-            System.out.println("Ledger Fastener Screws and related: Screws, Nuts and Washers: " + this.ledgerFastener.getLagScrews());
+
+            if(deckHouseLedgerLength != 0) {
+                System.out.println("House Ledger Length: " + this.deckHouseLedgerLength);
+                System.out.println("House Ledger Fasteners: " + this.ledgerFastener.getNumberOfFasteners());
+                System.out.println("Ledger Fastener Screws and related: Screws, Nuts and Washers: " + this.ledgerFastener.getLagScrews());
+                System.out.println("Rim Board Length: " + this.getRimBoardLength());
+            }
+
             System.out.println("Number of Posts (Not including House Ledger length: " + this.numberOfPosts + " at Length " + (this.deckHeight + 3) +"'");
             System.out.println("Number of bags of concrete: " + this.bagsOfConcrete);
             System.out.println("Number of Deck Beams: " + this.deckBeam.getNumberOfBeams() + " At length " + this.deckBeam.getLength()+"'");
@@ -264,10 +270,10 @@ public class DeckEstimate {
             System.out.println("Number- of Joists: " +this.joist.getNumberOfJoists());
             System.out.println("Number of Joist Hangers: " + this.joist.getNumberOfJoistHangers());
             System.out.println("Number of Hanger Nails:" + this.joist.getBoxesOfHangerNails());
-            System.out.println("Rim Board Length: " + this.getRimBoardLength());
+
             System.out.println("Number of Deck Boards: " + this.getNumberOfDeckBoards());
             System.out.println("Number of Spiral Nail Boxes: " + dbFastener.getBoxesOf8dGalvanizedSpiralNails());
-            System.out.println("Number of Gavanized Deck Screw Boxes: " + dbFastener.getBoxesOfGalvanizedDeckScrews());
+            System.out.println("Number of Galvanized Deck Screw Boxes: " + dbFastener.getBoxesOfGalvanizedDeckScrews());
 
         }
     }
@@ -294,22 +300,31 @@ public class DeckEstimate {
 
             sb.append("Here is the DeckEstimation Test Results: \n");
             sb.append("Deck Dimensions:  Length: ").append(this.deckLength).append(" Width: ").append(this.deckWidth).append(" Height: ").append(this.deckHeight).append("\n");
-            sb.append("Deck Calculations: Area: ").append(this.deckArea).append("  Perimiter: ").append(this.deckPerimeter);sb.append("\n");
-            sb.append("House Ledger Length: ").append(this.deckHouseLedgerLength);sb.append("\n");
-            sb.append("House Ledger Fasteners: ").append(this.ledgerFastener.getNumberOfFasteners());sb.append("\n");
-            sb.append("Ledger Fastener Screws and related: Screws, Nuts and Washers: ").append(this.ledgerFastener.getLagScrews());sb.append("\n");
+            sb.append("Deck Calculations: Area: ").append(this.deckArea).append(" Perimeter: ").append(this.deckPerimeter);sb.append("\n");
+            //If the ledger length is 0, we want to hide this information
+            if(deckHouseLedgerLength != 0) {
+                sb.append("House Ledger Length: ").append(this.deckHouseLedgerLength);
+                sb.append("\n");
+                sb.append("House Ledger Fasteners: ").append(this.ledgerFastener.getNumberOfFasteners());
+                sb.append("\n");
+                sb.append("Ledger Fastener Screws and related: Screws, Nuts and Washers: ").append(this.ledgerFastener.getLagScrews());
+                sb.append("\n");
+                sb.append("Rim Board Length: ").append(this.getRimBoardLength());sb.append("\n");
+            }
+            //End ledger information
             sb.append("Number of Posts (Not including House Ledger length: ").append(this.numberOfPosts).append(" at Length ").append((this.deckHeight + 3)).append("'");sb.append("\n");
             sb.append("Number of bags of concrete: ").append(this.bagsOfConcrete);sb.append("\n");
-            sb.append("Number of Deck Beams: ").append(this.deckBeam.getNumberOfBeams()).append(" At length ").append(this.deckBeam.getLength()).append( "'");sb.append("\n");
+            sb.append("Number of Deck Beams: ").append(this.deckBeam.getNumberOfBeams()).append(" and ").append((this.deckBeam.getNumberOfBeams() * 2)).append(" Beam Boards ").append("At length ").append(this.deckBeam.getLength()).append( "'");sb.append("\n");
             sb.append("Number of Deck Beam Fasteners: " ).append(this.deckBeam.getDeckBeamFastener().getNumberOfFasteners());sb.append("\n");
+
             sb.append("Deck Beam Screws and related: Carriage Bolts, Washers, Nuts: " ).append(this.deckBeam.getDeckBeamFastener().getNuts());sb.append("\n");
 
             sb.append("Number of Joists: ").append(this.joist.getNumberOfJoists());sb.append("\n");
-            sb.append("Number of Joist Hangers: ").append(this.joist.getNumberOfJoistHangers());sb.append("\n");
+            sb.append("Number of Joist Hangers: ").append(this.joist.getNumberOfJoistHangers() );sb.append("\n");
             sb.append("Number of Hanger Nails:").append(this.joist.getBoxesOfHangerNails());sb.append("\n");
-            sb.append("Rim Board Length: ").append(this.getRimBoardLength());sb.append("\n");
+
             sb.append("Number of Deck Boards: ").append(this.getNumberOfDeckBoards());sb.append("\n");
-            sb.append("Number of Spiral Nail Boxes: ").append(dbFastener.getBoxesOf8dGalvanizedSpiralNails());sb.append("\n");
+            sb.append("Boxes of Galvanized Spiral Nails: ").append(dbFastener.getBoxesOf8dGalvanizedSpiralNails());sb.append("\n");
 
         }
         System.out.println(sb);
@@ -459,7 +474,8 @@ class JoistEstimate extends DeckEstimate {
 
 
     //Attributes
-    private int numberOfJoists, numberOfJoistHangers;
+    private int numberOfJoists;
+    private int numberOfJoistHangers ;
     private int boxesOfHangerNails;
 
     //Getters and Setters
